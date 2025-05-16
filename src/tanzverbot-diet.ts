@@ -31,7 +31,7 @@ export function calcDateOnDiet(
 ): number {
 
 
-  
+
   const weightGainKg = targetWeightKg - currentWeightKg;
   if (weightGainKg < 0) {
     throw new Error(`This diet is for gaining weight, not loosing it!`);
@@ -40,25 +40,14 @@ export function calcDateOnDiet(
     throw new Error(`You do not qualify for this kind of diet.`);
   }
   let dailyCaloriesOnDiet = 0;
- 
 
-foods.forEach(food => {
-  dailyCaloriesOnDiet += food.caloriesPerServing * food.servings;
-});
 
-  //ToDo eigene function
-  let dailyCaloriesBasicMetabolicRate = 0;
-  if (sex == Sex.Male) {
-    dailyCaloriesBasicMetabolicRate = Math.ceil(
-      // Harris-Benedict-Formula (Male)
-      66.47 + 13.7 * currentWeightKg + 5.003 * heightM * 100.0 - 6.75 * ageY,
-    );
-  } else {
-    dailyCaloriesBasicMetabolicRate = Math.ceil(
-      // Harris-Benedict-Formula (Female)
-      655.1 + 9.563 * currentWeightKg + 1.85 * heightM * 100.0 - 4.676 * ageY,
-    );
-  }
+  foods.forEach(food => {
+    dailyCaloriesOnDiet += food.caloriesPerServing * food.servings;
+  });
+
+  let dailyCaloriesBasicMetabolicRate = HarrisBenedictFormula(currentWeightKg, heightM, ageY, sex);
+
   const dailyExcessCalories =
     dailyCaloriesOnDiet - dailyCaloriesBasicMetabolicRate;
   if (dailyExcessCalories <= 0) {
@@ -66,4 +55,21 @@ foods.forEach(food => {
   }
   return Math.ceil((9000 * weightGainKg) / dailyExcessCalories);
 }
+
+
+export function HarrisBenedictFormula(
+  currentWeightKg: number,
+  heightM: number,
+  ageY: number,
+  sex: Sex,
+): number {
+
+
+  if (sex == Sex.Male) {
+    return Math.ceil(66.47 + 13.7 * currentWeightKg + 5.003 * heightM * 100.0 - 6.75 * ageY);
+  } else {
+    return Math.ceil(655.1 + 9.563 * currentWeightKg + 1.85 * heightM * 100.0 - 4.676 * ageY);
+  }
+
+};
 
