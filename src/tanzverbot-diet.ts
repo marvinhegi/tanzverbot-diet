@@ -3,6 +3,7 @@ export enum Sex {
   Female = "f",
 }
 
+//ToDo in objekt
 const foodNames: string[] = [
   "Kellogg's Tresor",
   "Weihenstephan Haltbare Milch",
@@ -15,6 +16,8 @@ const foodNames: string[] = [
   "Schweppes Ginger Ale",
   "Mini Babybel",
 ];
+
+//ToDo
 const foodCalories: number[] = [137, 64, 271, 40, 297, 125, 482, 835, 37, 59];
 const foodServings: number[] = [4, 8, 4, 12, 1, 6, 2, 2, 25, 20];
 
@@ -33,11 +36,14 @@ export function calcDateOnDiet(
     throw new Error(`You do not qualify for this kind of diet.`);
   }
   let dailyCaloriesOnDiet = 0;
+  //ToDo for Each
   for (const index in foodNames) {
     const calories = foodCalories[index] || 0;
     const servings = foodServings[index] || 0;
     dailyCaloriesOnDiet += calories * servings;
   }
+
+  //ToDo eigene function
   let dailyCaloriesBasicMetabolicRate = 0;
   if (sex == Sex.Male) {
     dailyCaloriesBasicMetabolicRate = Math.ceil(
